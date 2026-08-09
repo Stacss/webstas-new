@@ -1,0 +1,6 @@
+old_url,new_url,status,reason
+https://webstas.ru/,https://webstas.ru/,200,Главная сохранена
+https://webstas.ru/portfolio-details,https://webstas.ru/#portfolio,301,Кейс Express Запчасти перенесён на главную
+https://webstas.ru/portfolio-details1,https://webstas.ru/#portfolio,301,Кейс Docpart перенесён на главную
+https://webstas.ru/portfolio-details2,https://webstas.ru/#portfolio,301,Кейс Like Feedback перенесён на главную
+https://webstas.ru/inner-page,https://webstas.ru/services/docpart-development/,301,Старая служебная ссылка направлена на релевантную услугу

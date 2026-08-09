@@ -1,0 +1,40 @@
+# Фрагмент для server { } webstas.ru. Путь к PHP-FPM и корень замените на реальные.
+root /var/www/webstas/current;
+index index.php;
+
+location = /portfolio-details  { return 301 https://webstas.ru/#portfolio; }
+location = /portfolio-details1 { return 301 https://webstas.ru/#portfolio; }
+location = /portfolio-details2 { return 301 https://webstas.ru/#portfolio; }
+location = /inner-page { return 301 https://webstas.ru/services/docpart-development/; }
+
+location / {
+    try_files $uri $uri/ =404;
+}
+
+location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+}
+
+location ~ ^/(includes|storage|tests|docs)/ { deny all; }
+location ~ /(\.env|config\.php|composer\.(json|lock))$ { deny all; }
+location ~ /\. { deny all; }
+
+location ~* \.(?:webp|png)$ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+location ~* \.(?:css|js)$ {
+    expires 30d;
+    add_header Cache-Control "public";
+}
+
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests" always;
+
+error_page 404 /404.php;
+location = /404.php { internal; include fastcgi_params; fastcgi_param SCRIPT_FILENAME $document_root/404.php; fastcgi_pass unix:/run/php/php8.4-fpm.sock; }

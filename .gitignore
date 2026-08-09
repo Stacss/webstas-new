@@ -1,0 +1,13 @@
+.env
+storage/rate-limit/*.json
+storage/used-challenges/*
+*.log
+home-*.png
+service-*.png
+/.env
+/vendor/
+/storage/logs/*
+!/storage/logs/.gitkeep
+.idea/
+.vscode/
+.DS_Store
