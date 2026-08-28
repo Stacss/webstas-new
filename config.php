@@ -1,6 +1,48 @@
 <?php
 declare(strict_types=1);
 
+function load_env_file(string $path): void
+{
+    if (!is_readable($path)) {
+        return;
+    }
+
+    $lines = file($path, FILE_IGNORE_NEW_LINES);
+    if ($lines === false) {
+        return;
+    }
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+
+        $separator = strpos($line, '=');
+        if ($separator === false) {
+            continue;
+        }
+
+        $key = trim(substr($line, 0, $separator));
+        $existing = getenv($key);
+        if (!preg_match('/^[A-Z_][A-Z0-9_]*$/', $key) || ($existing !== false && $existing !== '')) {
+            continue;
+        }
+
+        $value = trim(substr($line, $separator + 1));
+        $length = strlen($value);
+        if ($length >= 2 && (($value[0] === '"' && $value[$length - 1] === '"') || ($value[0] === "'" && $value[$length - 1] === "'"))) {
+            $value = substr($value, 1, -1);
+        }
+
+        putenv($key . '=' . $value);
+        $_ENV[$key] = $value;
+        $_SERVER[$key] = $value;
+    }
+}
+
+load_env_file(__DIR__ . '/.env');
+
 function env_value(string $key, string $default = ''): string
 {
     $value = getenv($key);
